@@ -42,8 +42,8 @@ def makeTex(directories):
          cases.append(case)
          epsilons.append(eps) 
          ipgs.append(ipg) 
-      print 'Lines type:', type(lines)
-      print 'Lines:', lines   
+      #print 'Lines type:', type(lines)
+      #print 'Lines:', len(lines)
       
       # CONTROLS- we work the only with case, eps, ipg
       for c in cases: 
@@ -137,7 +137,7 @@ $\eta_R$ & $\eta_F$ & $\eta_T$ & $\eta_{NC} $ \\
          f.write( first )    
          # First table 
          f.write( table_beg )  
-         for i in range( n_lines ): 
+         for i in range(len(lines)): 
             f.write( '{:5} {:2} {:8}{:12.12f}{:1} {:2} {:8}{:12.12f}{:1} {:2} {:5.0f} {:2} {:5.0f}'.format( \
                      int(lines[i][0]) , '&', '\\numeff{', lines[i][1], '}' , '&', '\\numeff{',  lines[i][2], '}', '&', lines[i][3] , '&', lines[i][4] ) )           
             # errors
@@ -151,7 +151,7 @@ $\eta_R$ & $\eta_F$ & $\eta_T$ & $\eta_{NC} $ \\
          f.write( table_end )     
          # SECOND table 
          f.write( table2_beg )  
-         for i in range( n_lines ): 
+         for i in range(len(lines)): 
             f.write( '{:5} {:2} {:8}{:12.12f}{:1} {:2} {:8}{:12.12f}{:1} {:2} {:5.0f} {:2} {:5.0f}'.format( \
                      int(lines[i][0]) , '&', '\\numeff{', lines[i][1], '}' , '&', '\\numeff{',  lines[i][2], '}', '&', lines[i][3] , '&', lines[i][4] ) )           
             for j in range(4): 

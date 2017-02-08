@@ -42,6 +42,7 @@ def dualError(directory):
    for i in range(N): 
       fileName = folder + 'rtn_' + str(i+1).zfill(4) + '.txt'
       error.append( oneStep(fileName) )  
+      print 'Total error (step', i,'): ', np.sqrt( sum( error ) )
    totError = np.sqrt( sum( error ) ) 
    print 'Total error:', totError 
    
@@ -62,11 +63,16 @@ def dualError(directory):
 # compute the residual error 
 # where to look for the files?
 
-directories = ['case02_p01_q01_nelem000032_steps00002']
+directoriesCompute = [ \
+               'case02_p01_q01_nelem002048_steps00020' \
+                ]
+                
+directoriesTex = ['case02_p01_q01_nelem000032_steps00002', \
+               'case02_p01_q01_nelem000128_steps00005', \
+               'case02_p01_q01_nelem000512_steps00010', \
+               'case02_p01_q01_nelem002048_steps00020' \
+                ]
 
-linesFile = 'case2_lines' 
-lines2File = 'case2_lines2'
-parametsFile = 'case2_paramets'   
 
 # compute the dual error of the residual for all directories
 # then save the results to files with the same name as the directory 
@@ -86,10 +92,10 @@ def compute(directories):
             f.close() 
    return  
 #Compute the errors and save them to files 
-compute(directories) 
+compute(directoriesCompute) 
 
 # Make tex table from the given files !!!
-makeTex(directories)
+makeTex(directoriesTex)
    
    
 

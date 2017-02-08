@@ -21,6 +21,7 @@ def oneStep( fileName ):
    '''
 
    # read the data
+   startTime = time.clock() 
    with open(fileName) as lines: 
        lbCorner_x, lbCorner_y, rtCorner_x, rtCorner_y = \
        [float(x) for x in next(lines).split()] # read the first line 
@@ -30,7 +31,10 @@ def oneStep( fileName ):
        for line in lines:
          data.append([float(v) for v in line.split()]) 
        lines.close()      
-      
+       
+   print 'Time spent on reading the data:', time.clock()-startTime
+   startTime = time.clock()  
+   
    # to numpy array : 
    #vals = np.array( [data[i][3] for i in range(len(data))] )  
    tau = ending - start  
@@ -147,12 +151,13 @@ def oneStep( fileName ):
    problem = LinearVariationalProblem(a, L, u, bc)
    solver = LinearVariationalSolver(problem) 
    solver.parameters["linear_solver"] = "gmres"
-   solver.parameters["preconditioner"] = "ilu"
+   solver.parameters["preconditioner"] = "amg"
    #solver.parameters["krylov_solver"]["monitor_convergence"] = True
-   start = time.clock()
+   print 'Time spent on assembling the system:', time.clock()-startTime
+   startTime = time.clock()
    solver.solve()
-   print 'Time elapsed:' , (time.clock() - start)
-   print 'Zbytecne se sestavuje system znovu? '
+   print 'Time elapsed on solution of the system:' , (time.clock() - startTime)
+   startTime = time.clock()
    
    #solve(a == L, u, bc,  \
    #         solver_parameters={'linear_solver': 'cg', \
@@ -172,5 +177,5 @@ def oneStep( fileName ):
    # weighted H1 seminorm SQUARED
    M = ( Ax*u.dx(0)**2. + Ay*u.dx(1)**2. + Az*u.dx(2)**2. ) *dx
    error = assemble(M) 
-   
+   print 'Time spent on error computation:' , (time.clock() - startTime)
    return error 

@@ -45,6 +45,7 @@ def dualError(directory):
       print 'Total error (step', i,'): ', np.sqrt( sum( error ) )
    totError = np.sqrt( sum( error ) ) 
    print 'Total error:', totError 
+   print ''
    
    iEff = eta / totError 
    iEffTot = ( eta + etaNC) / ( totError + etaNC )   
@@ -64,13 +65,18 @@ def dualError(directory):
 # where to look for the files?
 
 directoriesCompute = [ \
-               'case02_p01_q01_nelem002048_steps00020' \
+               'case02_p02_q01_nelem000032_steps00002', \
+               'case02_p02_q01_nelem000128_steps00010', \
+               'case02_p02_q01_nelem000512_steps00020' \
                 ]
                 
 directoriesTex = ['case02_p01_q01_nelem000032_steps00002', \
                'case02_p01_q01_nelem000128_steps00005', \
                'case02_p01_q01_nelem000512_steps00010', \
-               'case02_p01_q01_nelem002048_steps00020' \
+               'case02_p01_q01_nelem002048_steps00020', \
+               'case02_p02_q01_nelem000032_steps00002', \
+               'case02_p02_q01_nelem000128_steps00010', \
+               'case02_p02_q01_nelem000512_steps00020' \
                 ]
 
 

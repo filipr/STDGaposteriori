@@ -12,7 +12,6 @@ with open('in3D.txt') as lines:
 # to numpy array : 
 vals = np.array(  [data[i][3] for i in range(len(data))] ) 
 
-
 #print( 'x=', vals ) 
 
 #mesh = UnitCubeMesh(2, 2, 2) 

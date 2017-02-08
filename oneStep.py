@@ -1,5 +1,6 @@
 from dolfin import *
 import numpy as np
+import time
 
 def oneStep( fileName ): 
    '''
@@ -21,32 +22,39 @@ def oneStep( fileName ):
 
    # read the data
    with open(fileName) as lines: 
-       xCoord, coarseH, tCoord, start, ending, dK = [float(x) for x in next(lines).split()] # read first line
+       lbCorner_x, lbCorner_y, rtCorner_x, rtCorner_y = \
+       [float(x) for x in next(lines).split()] # read the first line 
+       xCoord, coarseH, tCoord, start, ending, dK = \
+       [float(x) for x in next(lines).split()] # read the 2nd line 
        data = []
        for line in lines:
          data.append([float(v) for v in line.split()]) 
-         
+       lines.close()      
+      
    # to numpy array : 
    #vals = np.array( [data[i][3] for i in range(len(data))] )  
-   tau = ending - start 
+   tau = ending - start  
+   
    coords = np.array( [data[i][0:3] for i in range(len(data))] ) 
-   print 'tau =' , tau
-   print 'h = ' , coarseH 
-   print 'dK = ', dK
+   #print 'tau =' , tau
+   #print 'h = ' , coarseH 
+   #print 'dK = ', dK
 
    fMinusDer = np.array( [data[i][3] for i in range(len(data))] )
    gradX = np.array( [data[i][4] for i in range(len(data))] )
    gradY = np.array( [data[i][5] for i in range(len(data))] )
    jump = np.array( [data[i][6] for i in range(len(data))] )
 
-   x0 = 0.0 
-   y0 = 0.0 
+   x0 = lbCorner_x
+   y0 = lbCorner_y
    z0 = start 
-   x1 = 1.0 
-   y1 = 1.0 
+   x1 = rtCorner_x
+   y1 = rtCorner_y
    z1 = ending 
    lbCorner = Point( x0, y0, z0 ) 
-   rtCorner = Point( x1, y1, z1 ) 
+   rtCorner = Point( x1, y1, z1 )  
+   #print 'dsad:' , lbCorner_x, lbCorner_y, rtCorner_x, rtCorner_y
+   #print 'startEnd', start, ending
 
    xCoord = int(xCoord)
    tCoord = int(tCoord)
@@ -60,8 +68,10 @@ def oneStep( fileName ):
 
    mesh = BoxMesh(lbCorner, rtCorner, nx-1, ny-1, nz-1)
    #print( mesh.coordinates()  )  
+   
 
    d = mesh.geometry().dim()
+   print( 'Nelem:',  mesh.num_entities(0), mesh.num_entities(3)  ) 
    #center = Point( 0.5, 0.5, 0.7 )
 
    V = FunctionSpace(mesh, 'CG', 1) 
@@ -134,12 +144,19 @@ def oneStep( fileName ):
 #   #print 'F=', type(F), F.array()
 #   krylovIter = solver.solve( A, u.vector(), F )  
    u = Function(V)
-#   problem = LinearVariationalProblem(a, L, u, bc)
-#   solver = LinearVariationalSolver(problem) 
-   solve(a == L, u, bc,  \
-            solver_parameters={'linear_solver': 'cg', \
-                         'preconditioner': 'amg'}) # icc, ilu, amg, sor
-#         
+   problem = LinearVariationalProblem(a, L, u, bc)
+   solver = LinearVariationalSolver(problem) 
+   solver.parameters["linear_solver"] = "gmres"
+   solver.parameters["preconditioner"] = "ilu"
+   #solver.parameters["krylov_solver"]["monitor_convergence"] = True
+   start = time.clock()
+   solver.solve()
+   print 'Time elapsed:' , (time.clock() - start)
+   print 'Zbytecne se sestavuje system znovu? '
+   
+   #solve(a == L, u, bc,  \
+   #         solver_parameters={'linear_solver': 'cg', \
+   #                      'preconditioner': 'ilu', 'monitor_convergence': True}) # icc, ilu, amg, sor   
 
    # estimate the error
    zero = Constant( 0.0 ) 

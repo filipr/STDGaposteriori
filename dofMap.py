@@ -39,16 +39,16 @@ plot(f, interactive = True)
 
 
 
-#v_d = vertex_to_dof_map(V)
-#print( 'vd:', v_d )
-#d_v = dof_to_vertex_map(V)
-#print( 'd_v:', d_v )
-## Coordinates of all dofs
-#dof_x = V.dofmap().tabulate_all_coordinates(mesh).reshape((-1, d))
+v_d = vertex_to_dof_map(V)
+print( 'vd:', v_d )
+d_v = dof_to_vertex_map(V)
+print( 'd_v:', d_v )
+# Coordinates of all dofs
+dof_x = V.dofmap().tabulate_all_coordinates(mesh).reshape((-1, d))
 
-## di_dx[dof_index] = coordinates of dof
-#di_dx = dof_x.tolist()
-#print( 'di_dx:', di_dx )
+# di_dx[dof_index] = coordinates of dof
+di_dx = dof_x.tolist()
+print( 'di_dx:', di_dx )
 ## Coordinates of all vertices
 #vertex_x = mesh.coordinates().reshape((-1, d))
 

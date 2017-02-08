@@ -61,6 +61,7 @@ def dualError(directory):
 
 # compute the residual error 
 # where to look for the files?
+
 directories = ['case02_p01_q01_nelem000032_steps00002']
 
 linesFile = 'case2_lines' 
@@ -85,12 +86,15 @@ def compute(directories):
             f.close() 
    return  
 #Compute the errors and save them to files 
-#compute(directories)
+compute(directories) 
 
-# Make tex table from the given files
+# Make tex table from the given files !!!
 makeTex(directories)
    
    
+
+
+
 
 
 

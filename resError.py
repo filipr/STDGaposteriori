@@ -1,82 +1,21 @@
 from dolfin import *
 import numpy as np 
 
-from oneStep import oneStep 
+from oneStep import readRHS, dualError
 from tex import makeTex
 
-def dualError(directory): 
-   '''
-   N =  number of files, i.e. number of time steps
-   spaceLevels = number of little elements per coarse triangle 
-   spaceLevels = number of little time steps pre one coarse time step 
-   nelem = #elements in the coarse mesh 
-   h = coarse H
-   tau = coarse time step length 
-   p = space pol. degree
-   q = time pol. degree
-   case = isca case in Adgfem 
-   eps = epsilon in front of the diffusion member 
-   ipg = SIPG,... 
-   etaR, etaF, etaT, etaNC = error estimators (Rezidual, Flux, timeRadau, NonConformity)
-   eta = discretizazion estimator (etaR + etaF + etaT) 
-   etaApprox = approximate of the error upper bound? 
-   '''
-
-   folder = '/home/filip/adgfem/RTN/export/'+ directory + '/'
-   firstFile = folder + 'initDualProblem.txt' 
-   
-   with open(firstFile) as lines: 
-         # N 
-         N, spaceLevels, timeLevels = [int(x) for x in next(lines).split()] # read first line 
-         nelem, h , tau, p, q    = [float(x) for x in next(lines).split()]
-         case, eps, ipg          = [x for x in next(lines).split()] 
-         etaR, etaF, etaT, etaNC = [float(x) for x in next(lines).split()]
-         eta , errApprox         = [float(x) for x in next(lines).split()]
-         lines.close() 
-   
-   print 'timeSteps = ' , N 
-   print 'spaceLevels = ', spaceLevels 
-   print 'timeLevels = ', timeLevels 
-   error = []
-   # name of the files  
-   for i in range(N): 
-      fileName = folder + 'rtn_' + str(i+1).zfill(4) + '.txt'
-      error.append( oneStep(fileName) )  
-      print 'Total error (step', i,'): ', np.sqrt( sum( error ) )
-   totError = np.sqrt( sum( error ) ) 
-   print 'Total error:', totError 
-   print ''
-   
-   iEff = eta / totError 
-   iEffTot = ( eta + etaNC) / ( totError + etaNC )   
-   iEffPseudo = eta / errApprox 
-   
-   line = [nelem, h, tau, p, q, totError, eta, errApprox, etaNC, iEff, iEffTot, iEffPseudo ]
-   lineEtas = [etaR, etaF, etaT, etaNC] 
-   
-   return line, lineEtas, case, eps, ipg
-
-################################################################################
-################################################################################
-################################################################################
-################################################################################
-
-# compute the residual error 
-# where to look for the files?
 
 directoriesCompute = [ \
-               'case02_p02_q01_nelem000032_steps00002', \
-               'case02_p02_q01_nelem000128_steps00010', \
-               'case02_p02_q01_nelem000512_steps00020' \
+               'case02_p02_q02_nelem000512_steps00020' \
                 ]
                 
-directoriesTex = ['case02_p01_q01_nelem000032_steps00002', \
-               'case02_p01_q01_nelem000128_steps00005', \
+directoriesTex = ['case02_p01_q01_nelem000128_steps00005', \
                'case02_p01_q01_nelem000512_steps00010', \
                'case02_p01_q01_nelem002048_steps00020', \
                'case02_p02_q01_nelem000032_steps00002', \
                'case02_p02_q01_nelem000128_steps00010', \
-               'case02_p02_q01_nelem000512_steps00020' \
+               'case02_p02_q01_nelem000512_steps00020', \
+               'case02_p02_q02_nelem000512_steps00020' \
                 ]
 
 

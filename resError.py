@@ -36,6 +36,8 @@ def compute(directories):
                f.write( '{:}{:2}'.format(x, '  ') )
             f.close() 
    return  
+   
+   
 #Compute the errors and save them to files 
 compute(directoriesCompute) 
 

@@ -1,29 +1,14 @@
-from dolfin import *
-import numpy as np 
+# from dolfin import *
+# import numpy as np 
 
-from oneStep import readRHS, dualError
-from tex import makeTex
-
-
-directoriesCompute = [ \
-               'case02_p02_q02_nelem000512_steps00020' \
-                ]
-                
-directoriesTex = ['case02_p01_q01_nelem000128_steps00005', \
-               'case02_p01_q01_nelem000512_steps00010', \
-               'case02_p01_q01_nelem002048_steps00020', \
-               'case02_p02_q01_nelem000032_steps00002', \
-               'case02_p02_q01_nelem000128_steps00010', \
-               'case02_p02_q01_nelem000512_steps00020', \
-               'case02_p02_q02_nelem000512_steps00020' \
-                ]
-
+from oneStep import dualError
+# from tex import makeTex
 
 # compute the dual error of the residual for all directories
 # then save the results to files with the same name as the directory 
-def compute(directories):
+def compute(directories, computeDual):
    for i in range(len(directories)): 
-      line, lineEtas, case, eps, ipg = dualError( directories[i] ) 
+      line, lineEtas, case, eps, ipg = dualError( directories[i] , computeDual) 
       
       # write to file
       fileName = directories[i] 
@@ -39,10 +24,10 @@ def compute(directories):
    
    
 #Compute the errors and save them to files 
-compute(directoriesCompute) 
+# compute(directoriesCompute) 
 
 # Make tex table from the given files !!!
-makeTex(directoriesTex)
+#makeTex(directoriesTex)
    
    
 

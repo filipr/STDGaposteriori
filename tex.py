@@ -28,10 +28,15 @@ def fromFileToLists(directory):
    return line, line2, case, eps, ipg 
 
 # make tex Table from the given files 
-def makeTex(directories):  
+def makeTex(directories, orders): 
+      '''
+      orders - true EOC, false not this line in tables 
+      ''' 
       
       lines = [] 
-      lines2 = [] 
+      eoc_lines = [] 
+      lines2 = []  
+      eoc_lines2 = []
       cases = [] 
       epsilons = []
       ipgs = []
@@ -42,13 +47,23 @@ def makeTex(directories):
          cases.append(case)
          epsilons.append(eps) 
          ipgs.append(ipg) 
-      #print 'Lines type:', type(lines)
-      #print 'Lines:', len(lines)
+      
+      # compute orders 
+      # eoc = log(e2)-log(e1) / ( log(h2)-log(h1) )
+      for i in range(1,len(lines)): 
+         h_log = np.log2( lines[i][1] / lines[i-1][1] ) 
+         eoc = [ np.log2(lines[i][j] / lines[i-1][j]) / h_log for j in range(len(lines[i])) ]  
+         eoc2 = [ np.log2(lines2[i][j] / lines2[i-1][j]) / h_log for j in range(len(lines2[i])) ]
+         eoc_lines.append( eoc )
+         eoc_lines2.append( eoc2 ) 
+      
+      print 'eoc_lines:' , len(eoc_lines), len(eoc_lines[0])
+      print 'lines:' , len(lines), len(lines[0])
       
       # CONTROLS- we work the only with case, eps, ipg
       for c in cases: 
          if (c != cases[0]): 
-            print 'The case are not the same!'
+            print 'The cases are not the same!'
             quit()             
       for c in epsilons: 
          if (c != epsilons[0]): 
@@ -78,10 +93,11 @@ def makeTex(directories):
 
 % soucast baliku texlive-sciene
 % nerozumi si s nekterymi definicemi napr \mA, je treba je zmenit ( mA se pouziva jako miliamper), atd.
-\usepackage[scientific-notation=true]{siunitx}
-\sisetup{round-mode=places,round-precision=1,tight-spacing = true}
-\newcommand{\numeff}[1]{\num[round-mode=places,round-precision=2]{#1}}
-\newcommand{\numm}[1]{\num[round-mode=places,round-precision=3]{#1}}
+\usepackage{siunitx}
+%\sisetup{round-mode=places,round-precision=1,tight-spacing = true}
+\newcommand{\numeff}[1]{\num[round-mode=places,scientific-notation=false, round-precision=2]{#1}}
+\newcommand{\numm}[1]{\num[round-mode=places,scientific-notation=true, round-precision=2]{#1}}
+\newcommand{\numeoc}[1]{\num[round-mode=places,scientific-notation=false, round-precision=2]{#1}}
 % \numeff - effectivity index format, \num 1.23 \times 10^{-3} format
 
 \renewcommand{\arraystretch}{1.2}
@@ -142,11 +158,20 @@ $\eta_R$ & $\eta_F$ & $\eta_T$ & $\eta_{NC} $ \\
                      int(lines[i][0]) , '&', '\\numeff{', lines[i][1], '}' , '&', '\\numeff{',  lines[i][2], '}', '&', lines[i][3] , '&', lines[i][4] ) )           
             # errors
             for j in range(5,9): 
-               f.write( '{:2} {:6} {:12.12f}{:1}'. format( '&' , '\\numm{' , lines[i][j] , '}' ) ) 
+               f.write( '{:2} {:7} {:12.12f}{:1}'. format( '&' , '\\numm{' , lines[i][j] , '}' ) ) 
             # i_eff
             for j in range(9,12): 
-               f.write( '{:2}{:8}{:12.12f}{:1} '. format( '&', '\\numeff{', lines[i][j] , '}' ) ) 
+               f.write( '{:2}{:9}{:12.12f}{:1} '. format( '&', '\\numeff{', lines[i][j] , '}' ) ) 
             f.write(  '{:2}'.format('\\\\ \n') )
+            
+            # EOC
+            if (i>=1 and orders): 
+               f.write( '{:8}' .format( '& & & & ') )  
+               for j in range(5,9): 
+                  f.write( '{:2} {:21} {:12.12f}{:3}'. format( \
+                           '&' , '{\\tiny ( \\numeoc{' , eoc_lines[i-1][j] , '} )}' ) 
+                         ) 
+               f.write( '{:10}' .format( '& & & \\\\ \n' ) )  
      
          f.write( table_end )     
          # SECOND table 
@@ -157,6 +182,15 @@ $\eta_R$ & $\eta_F$ & $\eta_T$ & $\eta_{NC} $ \\
             for j in range(4): 
                f.write( '{:2} {:6} {:12.12f}{:1}'. format( '&' , '\\numm{' , lines2[i][j] , '}' ) )
             f.write(  '{:2}'.format('\\\\ \n') ) 
+            
+            # EOC
+            if (i>=1 and orders): 
+               f.write( '{:8}' .format( '& & & & ') )  
+               for j in range(4): 
+                  f.write( '{:2} {:21} {:12.12f}{:3}'. format( \
+                           '&' , '{\\tiny ( \\numeoc{' , eoc_lines2[i-1][j] , '} )}' ) 
+                         ) 
+               f.write( '{:10}' .format( '\\\\ \n' ) )  
          
          f.write( table_end )     
          f.write( doc_end)

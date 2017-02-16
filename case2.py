@@ -10,15 +10,20 @@ directoriesCompute = [ \
                ]
                 
 directoriesTex = [ \
-               'case02_p01_q01_nelem000128_steps00005', \
-               'case02_p01_q01_nelem000512_steps00008', \
-               'case02_p01_q01_nelem002048_steps00010', \
                'case02_p02_q01_nelem000128_steps00008', \
                'case02_p02_q01_nelem000512_steps00016', \
                'case02_p02_q01_nelem002048_steps00032' \
-                ]
-#                'case02_p01_q01_nelem008192_steps00020', \
+               ]
 
+# P1 Q1 
+#                'case02_p01_q01_nelem000128_steps00005', \
+#                'case02_p01_q01_nelem000512_steps00008', \
+#                'case02_p01_q01_nelem002048_steps00010', \
+#                'case02_p01_q01_nelem008192_steps00016', \
+
+# 'case02_p02_q01_nelem000128_steps00008', \
+#                'case02_p02_q01_nelem000512_steps00016', \
+#                'case02_p02_q01_nelem002048_steps00032' \
 
 # 'case02_p03_q02_nelem000128_steps00008', \
 # 'case02_p03_q02_nelem000512_steps00016', \

@@ -60,7 +60,7 @@ def dualError(directory, computeDual):
    if (computeDual):
       totError = solveDualProblem(folder, fileName, tau, N)
    else: 
-      totError = 0.0  
+      totError = 10.0  
       
    iEff = eta / totError 
    iEffTot = ( eta + etaNC) / ( totError + etaNC )   
@@ -211,7 +211,7 @@ def solveDualProblem(folder, fileName, tau, N):
 
    # SET the actual RHS  and solve the problem
    for i in range(N):  
-      print*, 'Step:', i
+      print 'Step:', i
       # read the RHS data from file
       fileName = folder + 'rtn_' + str(i+1).zfill(4) + '.txt'
       fMinusDer, gradX, gradY, jump = readRHS( fileName )

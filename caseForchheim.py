@@ -6,13 +6,13 @@ from resError import compute
 
 
 directoriesCompute = [ \
-               'case24_p02_q01_nelem004608_steps00040' \
+               'case69_p01_q01_nelem000128_steps00010', \
+               'case69_p01_q01_nelem000512_steps00020' \
                 ]
                 
 directoriesTex = [ \
-               'case24_p02_q01_nelem000288_steps00010', \
-               'case24_p02_q01_nelem001152_steps00020', \
-               'case24_p02_q01_nelem004608_steps00040' \
+               'case69_p01_q01_nelem000128_steps00010', \
+               'case69_p01_q01_nelem000512_steps00020' \
                  ]
 
 # case24_p02_q01_nelem004608_steps00040
@@ -22,7 +22,7 @@ directoriesTex = [ \
 orders = True
 
 # Compute the dual error OR set the tables with zero value 
-computeDual = False
+computeDual = True
   
    
 #Compute the errors and save them to files 

@@ -6,13 +6,13 @@ from resError import compute
 
 
 directoriesCompute = [ \
-               'case69_p01_q01_nelem000128_steps00010', \
-               'case69_p01_q01_nelem000512_steps00020' \
+               'case69_p01_q01_nelem000128_steps00010' \
                 ]
                 
 directoriesTex = [ \
                'case69_p01_q01_nelem000128_steps00010', \
-               'case69_p01_q01_nelem000512_steps00020' \
+               'case69_p01_q01_nelem000512_steps00020', \
+               'case69_p01_q01_nelem002048_steps00040' \
                  ]
 
 # case24_p02_q01_nelem004608_steps00040
